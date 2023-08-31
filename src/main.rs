@@ -34,10 +34,18 @@ fn find_first_file_with_extension(folder_path: &str, target_extension: &str) -> 
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    env_logger::init_from_env(env_logger::Env::new().default_filter_or("info"));
+
+    log::info!("Starting HTTP server!");
+
     HttpServer::new(|| {
         App::new()
             .service(send_apk)
-            .wrap(Logger::default())
+            .wrap(Logger::new("\nIP: %a\n\
+            User-Agent: %{User-Agent}i\n\
+            Status code: %s\n\
+            Time: %T\n\
+            Endpoint: %U"))
     })
         .bind(("0.0.0.0", 8080))
         .unwrap()
