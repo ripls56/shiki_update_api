@@ -45,7 +45,7 @@ async fn main() -> std::io::Result<()> {
             User-Agent: %{User-Agent}i\n\
             Status code: %s\n\
             Time: %T\n\
-            Endpoint: %U"))
+            Endpoint: %U\n"))
     })
         .bind(("0.0.0.0", 8080))
         .unwrap()
