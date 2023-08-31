@@ -39,7 +39,7 @@ async fn main() -> std::io::Result<()> {
             .service(send_apk)
             .wrap(Logger::default())
     })
-        .bind(("185.9.55.21", 8080))
+        .bind(("0.0.0.0", 8080))
         .unwrap()
         .run()
         .await
