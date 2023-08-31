@@ -2,6 +2,8 @@ use std::fs;
 use actix_web::{get, App, HttpServer, HttpResponse, HttpRequest};
 use actix_web::http::StatusCode;
 use actix_web::middleware::Logger;
+use colored::Colorize;
+
 
 #[get("/update")]
 async fn send_apk(req: HttpRequest) -> HttpResponse {
@@ -35,17 +37,14 @@ fn find_first_file_with_extension(folder_path: &str, target_extension: &str) -> 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     env_logger::init_from_env(env_logger::Env::new().default_filter_or("info"));
-
-    log::info!("Starting HTTP server!");
-
+    log::info!("{}", "Starting HTTP server!".green());
     HttpServer::new(|| {
         App::new()
             .service(send_apk)
-            .wrap(Logger::new("\nIP: %a\n\
-            User-Agent: %{User-Agent}i\n\
-            Status code: %s\n\
-            Time: %T\n\
-            Endpoint: %U"))
+            .wrap(Logger::new(("\nStatus Code %s ".green().to_string()
+                + "IP: %a".cyan().to_string().as_str()
+                + " %T".magenta().to_string().as_str()
+                + "\nUser-Agent: %{User-Agent}i".bright_yellow().to_string().as_str()).as_str()))
     })
         .bind(("0.0.0.0", 8080))
         .unwrap()
